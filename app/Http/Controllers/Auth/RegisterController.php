@@ -36,7 +36,11 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+	if (config('autodns.registration') == 'true') {
+        	$this->middleware('guest');
+	} else {
+		$this->middleware('auth');
+	}
     }
 
     /**

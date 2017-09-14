@@ -7,6 +7,7 @@ return array(
 	'replyto' => env('AUTODNS_REPLYTO', ''),
 	'language' => env('AUTODNS_LANG', 'en'),
 	'url' => env('AUTODNS_URL', 'https://gateway.autodns.com'),
+	'registration' => env('AUTODNS_REGISTRATION', 'true'),
 );
 
 ?>
