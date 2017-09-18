@@ -1,14 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
 
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>Items CRUD</h2>
+                <h2>All DNS servers</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('serverCRUD.create') }}"> Create New Item</a>
+                <a class="btn btn-success" href="{{ route('serverCRUD.create') }}"> Create New DNS Server</a>
             </div>
         </div>
     </div>
@@ -42,4 +43,5 @@
 
     {!! $items->render() !!}
 
+</div>
 @endsection

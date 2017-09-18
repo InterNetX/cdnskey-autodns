@@ -14,7 +14,9 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <p><a href="{{ route('serverCRUD.index') }}">Manage DNS Servers</a></p>
+                    <p><a href="{{ route('zoneCRUD.index') }}">Manage Zones</a></p>
+
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'CDNSKEY AutoDNS') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -28,15 +28,20 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'AutoDNS CDNSKEY') }}
+                    <a class="navbar-brand" href="{{ url('/home') }}">
+                        {{ config('app.name', 'CDNSKEY AutoDNS') }}
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+@guest
+			&nbsp;
+@else
+                        <li><a href="{{ route('serverCRUD.index') }}">Servers</a></li>
+                        <li><a href="{{ route('zoneCRUD.index') }}">Zones</a></li>
+@endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
