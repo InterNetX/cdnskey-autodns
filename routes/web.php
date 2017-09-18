@@ -23,3 +23,7 @@ Route::resource('serverCRUD','DNSServerController');
 
 Route::get('/server', 'DNSServerController@index')->name('server');
 
+Route::resource('zoneCRUD','DNSZoneController');
+
+Route::get('/zone', 'DNSZoneController@index')->name('server');
+
