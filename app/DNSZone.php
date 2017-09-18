@@ -14,10 +14,15 @@ class DNSZone extends Model
     protected $table = 'dns_zone';
 
     /**
-     * Get the server associated with the zone.
+     * These fields can be set on create.
+     */
+    protected $fillable = ['name', 'dns_server_id' ];
+
+    /**
+     * Get the DNS server associated with the DNS zone.
      */
     public function server()
     {
-        return $this->hasOne('App\DNSServer');
+       return $this->hasOne('App\DNSServer', 'id', 'dns_server_id');
     }
 }
