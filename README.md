@@ -38,3 +38,13 @@ As soon as the initial users are created, you need to disable the public user re
 
 All users that can login, will still be able to create new users, if needed.
 
+## Cron job
+
+CDNSKEY checks are performed via a cron job, you need to setup manually like this:
+
+	* * * * * php /installation-path/artisan schedule:run >> /dev/null 2>&1
+
+If you want to force execution of the cron on the console, type
+
+	./artisan cdnskey:check
+
