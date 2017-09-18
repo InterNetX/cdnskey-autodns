@@ -54,7 +54,7 @@ class DNSZoneController extends Controller
 
         DNSZone::create($request->all());
         return redirect()->route('zoneCRUD.index')
-                        ->with('success','DNS server created successfully');
+                        ->with('success','DNS zone created successfully');
     }
 
     /**
@@ -99,7 +99,7 @@ class DNSZoneController extends Controller
 
         DNSZone::find($id)->update($request->all());
         return redirect()->route('zoneCRUD.index')
-                        ->with('success','DNS server updated successfully');
+                        ->with('success','DNS zone updated successfully');
     }
 
 
@@ -112,8 +112,8 @@ class DNSZoneController extends Controller
     public function destroy($id)
     {
         DNSZone::find($id)->delete();
-        return redirect()->route('serverCRUD.index')
-                        ->with('success','DNS server deleted successfully');
+        return redirect()->route('zoneCRUD.index')
+                        ->with('success','DNS zone deleted successfully');
 
     }
 }
