@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Net_DNS2_Resolver;
+use Net_DNS2_Exception;
 use App\DNSZone;
 
 class CheckCDNSKEY extends Command
@@ -40,7 +41,7 @@ class CheckCDNSKEY extends Command
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
         if( !$data = curl_exec( $ch )) {
-                Log::error('Curl execution error.', curl_error( $ch ));
+                Log::error('Curl execution error.'.curl_error( $ch ));
         return FALSE;
         }
         curl_close( $ch );
@@ -65,7 +66,7 @@ class CheckCDNSKEY extends Command
 		try {
 			$result = $r->query($d, 'NS');        
 		} catch(Net_DNS2_Exception $e) {
-			Log::error("::query() NS failed: ", $e->getMessage());
+			Log::error("::query() NS $d failed: ".$e->getMessage());
 			continue;
 		}
 		//
@@ -82,7 +83,7 @@ class CheckCDNSKEY extends Command
 		try {
 			$result = $r->query($d, 'CDNSKEY');
 		} catch(Net_DNS2_Exception $e) {
-			Log::error("::query() CDNSKEY failed: ", $e->getMessage());
+			Log::error("::query() CDNSKEY failed: ".$e->getMessage());
 			continue;
 		}
 		foreach($result->answer as $cdnskeyrr) {
