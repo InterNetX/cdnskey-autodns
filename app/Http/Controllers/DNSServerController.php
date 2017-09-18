@@ -8,6 +8,14 @@ use App\DNSServer;
 class DNSServerController extends Controller
 {
     /**
+     * This controller requires authentication
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -39,7 +47,7 @@ class DNSServerController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'ip' => 'required',
+            'ip' => 'required|ip',
         ]);
 
         DNSServer::create($request->all());
