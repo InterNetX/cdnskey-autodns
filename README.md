@@ -14,6 +14,9 @@ Create database and grant rights:
 	CREATE DATABASE cdnskeydns DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 	GRANT ALL ON cdnskeydns.* TO 'cdnskeydns'@'localhost' IDENTIFIED BY '<password>';
 
+
+MySQL isn't required, it's possible to configure any DB that is supported by Laravel.
+
 ## Configure AutoDNS account
 
 You will require an AutoDNS API user that has the rights to perform domain updates (including namserver/DNSSEC). The function codes that need to be permitted are 0102, 0102007 and 0102008.
