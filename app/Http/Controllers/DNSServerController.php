@@ -92,7 +92,7 @@ class DNSServerController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'ip' => 'required',
+            'ip' => 'required|ip',
         ]);
 
         DNSServer::find($id)->update($request->all());
