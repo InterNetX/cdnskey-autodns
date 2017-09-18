@@ -36,6 +36,7 @@
         <td>
             <a class="btn btn-info" href="{{ route('zoneCRUD.show',$item->id) }}">Show</a>
             <a class="btn btn-primary" href="{{ route('zoneCRUD.edit',$item->id) }}">Edit</a>
+            <a class="btn btn-danger" onclick="return confirm('Are you sure?')" href="{{ route('zoneCRUD.destroy',$item->id) }}">Delete</a>
         </td>
     </tr>
     @endforeach

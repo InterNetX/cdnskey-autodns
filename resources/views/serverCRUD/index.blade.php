@@ -36,6 +36,7 @@
         <td>
             <a class="btn btn-info" href="{{ route('serverCRUD.show',$item->id) }}">Show</a>
             <a class="btn btn-primary" href="{{ route('serverCRUD.edit',$item->id) }}">Edit</a>
+            <a class="btn btn-danger" onclick="return confirm('Are you sure?')" href="{{ route('serverCRUD.destroy',$item->id) }}">Delete</a>
         </td>
     </tr>
     @endforeach
