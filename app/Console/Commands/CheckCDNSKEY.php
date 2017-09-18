@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Net_DNS2_Resolver;
+use App\DNSZone;
 
 class CheckCDNSKEY extends Command
 {
@@ -53,10 +54,10 @@ class CheckCDNSKEY extends Command
      */
     public function handle()
     {
-	$domains = [
-		"cdnskey.de" => "51.15.72.85"
-	];
-	foreach ($domains as $d => $s) {
+	$domains = DNSZone::all();
+	foreach ($domains as $dom) {
+		$d = $dom->name;
+		$s = $dom->server->ip;
 		Log::info("Checking $d on $s");
 		$all_ns = array();
 		$required_ns = array();
