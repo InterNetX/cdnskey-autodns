@@ -1,6 +1,14 @@
 # CDNSKEY AutoDNS
 AutoDNS client that will poll a DNS server for CDNSKEY entries and update them via AutoDNS API.
 
+# Requirements
+
+* Authorative DNS server that deploys CDNSKEY records to zones (e.g. [Knot](https://www.knot-dns.cz/))
+* [AutoDNS account](https://www.internetx.com/domains/autodns/)
+* PHP 7
+* PHP Composer
+* Apache / NGINX web server
+
 # Setup
 
 CDNSKEY AutoDNS is a Laravel application. It can be installed and customized with a few steps.
@@ -83,4 +91,47 @@ CDNSKEY checks are performed via a cron job, you need to setup manually like thi
 If you want to force execution of the cron on the console, type
 
 	./artisan cdnskey:check
+
+## Webserver setup (nginx example)
+
+	server {
+		listen 80;
+		listen [::]:80;
+	
+		listen 443 ssl;
+		ssl_certificate fullchain.pem;
+		ssl_certificate_key privkey.pem;
+	
+		# https only access
+		if ($scheme != "https") {
+			return 301 https://$host$request_uri;
+		}
+	
+		root /home/demo/cdnskey-autodns/public;
+	
+		# Add index.php to the list if you are using PHP
+		index index.php index.html index.htm index.nginx-debian.html;
+	
+		server_name demo.cdnskey.example.org;
+	
+		location / {
+			try_files $uri $uri/ /index.php?$query_string;
+		}
+	
+		# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+		#
+		location ~ \.php$ {
+			include snippets/fastcgi-php.conf;
+			fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+		}
+	
+		# deny access to .htaccess files, if Apache's document root concurs with nginx's one
+		location ~ /\.ht {
+			deny all;
+		}
+	
+		location ~ /.well-known {
+			allow all;
+		}
+	}
 
