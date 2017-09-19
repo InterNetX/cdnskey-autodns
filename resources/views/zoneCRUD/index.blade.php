@@ -36,7 +36,11 @@
         <td>
             <a class="btn btn-info" href="{{ route('zoneCRUD.show',$item->id) }}">Show</a>
             <a class="btn btn-primary" href="{{ route('zoneCRUD.edit',$item->id) }}">Edit</a>
-            <a class="btn btn-danger" onclick="return confirm('Are you sure?')" href="{{ route('zoneCRUD.destroy',$item->id) }}">Delete</a>
+            <a class="btn btn-danger" onclick="event.preventDefault(); if(confirm('Do you really want to delete this DNS zone?')) document.getElementById('delete-form').submit();" href="{{ route('zoneCRUD.destroy',$item->id) }}">Delete</a>
+            <form id="delete-form" action="{{ route('zoneCRUD.destroy',$item->id) }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+		{{ method_field('DELETE') }}
+            </form>
         </td>
     </tr>
     @endforeach
