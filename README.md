@@ -57,6 +57,16 @@ Create database and grant rights:
 
 MySQL isn't required, it's possible to configure any DB that is supported by Laravel.
 
+The database configuration must be set in the .env configuration file.
+
+	DB_CONNECTION=mysql
+	DB_HOST=127.0.0.1
+	DB_PORT=3306
+	DB_DATABASE=cdnskeydns
+	DB_USERNAME=cdnskeydns
+	DB_PASSWORD="<password>"
+
+
 Once the database is set-up, you need to create the database tables.
 
 	./artisan migrate
