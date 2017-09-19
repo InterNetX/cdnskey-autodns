@@ -3,6 +3,39 @@ AutoDNS client that will poll a DNS server for CDNSKEY entries and update them v
 
 # Setup
 
+CDNSKEY AutoDNS is a Laravel application. It can be installed and customized with a few steps.
+
+## Clone via git
+
+    git clone https://github.com/InterNetX/cdnskey-autodns.git
+
+This will allow easy updates via git. It is also possible to download the ZIP file and extract it before following the next steps.
+
+## Basic commands to setup the application
+
+	composer install
+	cp .env.example .env
+
+You can now edit .env with your favorite editor and do some basic setup.
+
+	APP_NAME="CDNSKEY AutoDNS DEMO"
+	APP_ENV=production
+	APP_KEY=
+	APP_DEBUG=true
+	APP_LOG_LEVEL=debug
+	APP_URL=https://demo.cdnskey.example.org/
+
+Next step is to setup the APP_KEY with artisan.
+
+	./artisan key:generate
+
+The application needs to write to data to some folders, please make sure they are writable for the webserver.
+
+	sudo chgrp -R www-data storage bootstrap/cache
+	sudo chmod -R ug+rwx storage bootstrap/cache
+
+When you're running PHP FPM and have set-up the pool to run with the user you're performing the installation, these steps might be ommited.
+
 ## Setup the database
 
 In this example we'll use MySQL on Ubuntu 16.04:
@@ -14,8 +47,11 @@ Create database and grant rights:
 	CREATE DATABASE cdnskeydns DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 	GRANT ALL ON cdnskeydns.* TO 'cdnskeydns'@'localhost' IDENTIFIED BY '<password>';
 
-
 MySQL isn't required, it's possible to configure any DB that is supported by Laravel.
+
+Once the database is set-up, you need to create the database tables.
+
+	./artisan migrate
 
 ## Configure AutoDNS account
 
