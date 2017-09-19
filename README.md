@@ -118,10 +118,10 @@ If you want to force execution of the cron on the console, type
 			try_files $uri $uri/ /index.php?$query_string;
 		}
 	
-		# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-		#
+		# pass the PHP scripts to FastCGI server listening on socket.
 		location ~ \.php$ {
 			include snippets/fastcgi-php.conf;
+			# Please note: there is one socket per version / pool
 			fastcgi_pass unix:/run/php/php7.1-fpm.sock;
 		}
 	
