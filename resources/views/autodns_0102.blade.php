@@ -5,7 +5,14 @@
 			<name>{{ $name }}</name>
 @foreach ($ns as $n)
 			<nserver>
-				<name>{{ $n->nsdname }}</name>
+				<name>{{ $n['name'] }}</name>
+@foreach ($n['ip'] as $i)
+				<ip>{{ $i }}</ip>
+@endforeach
+@foreach ($n['ip6'] as $i6)
+				<ip6>{{ $i6 }}</ip6>
+@endforeach
+
 			</nserver>
 @endforeach
 @foreach ($dnskey as $d)
