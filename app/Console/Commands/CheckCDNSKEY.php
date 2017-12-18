@@ -48,6 +48,10 @@ class CheckCDNSKEY extends Command
         return $data;
     }
 
+    function endsWith( $str, $sub ) {
+        return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
+    }
+
     /**
      * Execute the console command.
      *
@@ -55,6 +59,7 @@ class CheckCDNSKEY extends Command
      */
     public function handle()
     {
+	Log::info("*** Checking zones");
 	$domains = DNSZone::all();
 	foreach ($domains as $dom) {
 		$d = $dom->name;
@@ -64,7 +69,7 @@ class CheckCDNSKEY extends Command
 		$required_ns = array();
 		$r = new Net_DNS2_Resolver(array('nameservers' => array($s)));
 		try {
-			$result = $r->query($d, 'NS');        
+			$result = $r->query($d, 'NS');
 		} catch(Net_DNS2_Exception $e) {
 			Log::error("::query() NS $d failed: ".$e->getMessage());
 			continue;
@@ -72,8 +77,45 @@ class CheckCDNSKEY extends Command
 		//
 		foreach($result->answer as $nsrr)
 		{
-			// TODO: if GLUE then lookup all A, AAAA
-			array_push($required_ns, $nsrr->nsdname);
+			$ns_name = (string)$nsrr->nsdname;
+			$dat = array();
+			$dat['name'] = $ns_name;
+			$dat['ip'] = array();
+			$dat['ip6'] = array();
+			$glues = array();
+			// If nameserver is GLUE, then lookup all A and AAAA records
+			if ($ns_name == $d || $this->endsWith($ns_name, ".$d")) {
+				Log::info("Getting GLUE A/AAAA records for $ns_name");
+				try {
+					$result = $r->query($ns_name, 'A');
+					foreach($result->answer as $arr) {
+						$adr = inet_ntop(inet_pton($arr->address));
+						array_push($dat['ip'], $adr);
+						array_push($glues, $adr);
+					}
+				} catch(Net_DNS2_Exception $e) {
+					Log::error("::query() A $ns_name failed: ".$e->getMessage());
+					continue 2;
+				}
+				try {
+					$result = $r->query($ns_name, 'AAAA');
+					foreach($result->answer as $arr) {
+						$adr = inet_ntop(inet_pton($arr->address));
+						array_push($dat['ip6'], $adr);
+						array_push($glues, $adr);
+					}
+				} catch(Net_DNS2_Exception $e) {
+					Log::error("::query() AAAA $ns_name failed: ".$e->getMessage());
+					continue 2;
+				}
+			}
+			array_push($all_ns, $dat);
+			$ip_addon = '';
+			if (sizeof($glues) > 0) {
+				sort($glues);
+				$ip_addon = ' '.implode(' ', $glues);
+			}
+			array_push($required_ns, $ns_name.$ip_addon);
 		}
 
 		sort($required_ns);
@@ -111,7 +153,6 @@ class CheckCDNSKEY extends Command
 		}
 		$autodns_ns = array();
 		foreach ($xml->result->data->domain->nserver as $ns) {
-			array_push($autodns_ns, (string)$ns->name);
 			$glues = array();
 			foreach ($ns->ip as $i) {
 				array_push($glues, inet_ntop(inet_pton($i)));
@@ -124,7 +165,7 @@ class CheckCDNSKEY extends Command
 				sort($glues);
 				$ip_addon = ' '.implode(' ', $glues);
 			}
-			array_push($required_ns, $nsrr->nsdname.$ip_addon);
+			array_push($autodns_ns, ((string)$ns->name).$ip_addon);
 		}
 		sort($autodns_ns);
 
